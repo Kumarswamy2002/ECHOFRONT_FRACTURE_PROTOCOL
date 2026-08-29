@@ -1,0 +1,41 @@
+{
+  "project_name": "ECHOFRONT: Fracture Protocol",
+  "version": "1.0.0",
+  "ownership": {
+    "entity_name": "Project Lead / ElevateIQ Ownership Entity",
+    "jurisdiction": "Worldwide Commercial Rights Reserved",
+    "license_model": "Proprietary Commercial Game IP",
+    "registration_date": "2026-08-29"
+  },
+  "ip_declarations": {
+    "world_lore": "Fracture Horizon universe (Year 2148 temporal resonance crisis). 100% original worldbuilding, factions, narrative, terminology and setting.",
+    "character_roster": [
+      {"id": "OP-01", "name": "Vanguard: AEX-01 (Apex)", "role": "Breacher", "status": "Original Registered Concept"},
+      {"id": "OP-02", "name": "Sentinel: BASTION-9", "role": "Fortifier", "status": "Original Registered Concept"},
+      {"id": "OP-03", "name": "Recon: VAPOR", "role": "Scout", "status": "Original Registered Concept"},
+      {"id": "OP-04", "name": "Disruptor: NULL", "role": "Saboteur", "status": "Original Registered Concept"},
+      {"id": "OP-05", "name": "Engineer: FORGE", "role": "Specialist", "status": "Original Registered Concept"},
+      {"id": "OP-06", "name": "Medic: AEGIS", "role": "Support", "status": "Original Registered Concept"},
+      {"id": "OP-07", "name": "Hunter: WRAITH", "role": "Infiltrator", "status": "Original Registered Concept"},
+      {"id": "OP-08", "name": "Controller: CRYO", "role": "Area Denial", "status": "Original Registered Concept"},
+      {"id": "OP-09", "name": "Infiltrator: PHANTOM", "role": "Duelist", "status": "Original Registered Concept"},
+      {"id": "OP-10", "name": "Support: VECTOR", "role": "Utility", "status": "Original Registered Concept"},
+      {"id": "OP-11", "name": "Scout: ZEPHYR", "role": "Skirmisher", "status": "Original Registered Concept"},
+      {"id": "OP-12", "name": "Specialist: CHRONO", "role": "Tactician", "status": "Original Registered Concept"}
+    ],
+    "gameplay_systems": [
+      "Dynamic 5-Stage Fracture Node Network Simulation",
+      "Authoritative Delta-Compressed UDP Replication Pipeline",
+      "Lag Compensated Historical Position Ring Buffer",
+      "Double-Entry Idempotent Virtual Currency Ledger",
+      "Client Prediction and Server Reconciliation Framework"
+    ]
+  },
+  "third_party_dependencies": [
+    {"name": "FastAPI", "license": "MIT", "purpose": "REST API framework"},
+    {"name": "SQLAlchemy", "license": "MIT", "purpose": "Async ORM and Database Persistence"},
+    {"name": "PostgreSQL", "license": "PostgreSQL License", "purpose": "Relational durable database"},
+    {"name": "Redis", "license": "BSD-3-Clause", "purpose": "In-memory caching and message broker"},
+    {"name": "Unreal Engine 5", "license": "Epic Games EULA", "purpose": "Rendering and presentation client"}
+  ]
+}

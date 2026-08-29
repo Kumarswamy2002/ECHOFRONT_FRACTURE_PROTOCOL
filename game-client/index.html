@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECHOFRONT: FRACTURE PROTOCOL // Playable 3D Combat Client</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Three.js for 3D Accelerated WebGL Engine -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <!-- Game Viewport 3D Canvas -->
+    <div id="game-container"></div>
+
+    <!-- UI Overlay / HUD -->
+    <div id="hud-overlay">
+        <!-- Top Status: Match Time & Node Scores -->
+        <div class="hud-top">
+            <div class="team-score alpha-team">
+                <span class="team-label">TEAM ALPHA</span>
+                <span class="team-points" id="score-alpha">0</span>
+            </div>
+            <div class="match-timer-box">
+                <div class="mode-title">FRACTURE CONTROL // 60Hz</div>
+                <div class="timer-display" id="match-timer">15:00</div>
+                <div class="destab-warning" id="destab-alert">EXTRACTION BEACON ACTIVE</div>
+            </div>
+            <div class="team-score omega-team">
+                <span class="team-label">ENEMY FORCES</span>
+                <span class="team-points" id="score-omega">0</span>
+            </div>
+        </div>
+
+        <!-- Node Control Status Bar -->
+        <div class="node-hud-bar">
+            <div class="node-hud-badge" id="hud-node-a">
+                <span class="node-icon">▲</span>
+                <span class="node-id">NODE ALPHA</span>
+                <div class="node-mini-progress"><div class="fill" id="fill-node-a"></div></div>
+            </div>
+            <div class="node-hud-badge" id="hud-node-b">
+                <span class="node-icon">■</span>
+                <span class="node-id">NODE BRAVO</span>
+                <div class="node-mini-progress"><div class="fill" id="fill-node-b"></div></div>
+            </div>
+            <div class="node-hud-badge" id="hud-node-c">
+                <span class="node-icon">◆</span>
+                <span class="node-id">NODE CHARLIE</span>
+                <div class="node-mini-progress"><div class="fill" id="fill-node-c"></div></div>
+            </div>
+        </div>
+
+        <!-- Center Crosshair & Hitmarker -->
+        <div class="crosshair-container">
+            <div class="crosshair" id="crosshair">
+                <div class="crosshair-dot"></div>
+                <div class="crosshair-line top"></div>
+                <div class="crosshair-line bottom"></div>
+                <div class="crosshair-line left"></div>
+                <div class="crosshair-line right"></div>
+            </div>
+            <div class="hitmarker" id="hitmarker">╳</div>
+        </div>
+
+        <!-- Objective / Capture Prompt -->
+        <div class="interaction-prompt" id="interact-prompt">
+            <span class="key-hint">[E]</span> CAPTURING FRACTURE NODE
+        </div>
+
+        <!-- Damage Flash Effect -->
+        <div class="damage-flash" id="damage-flash"></div>
+
+        <!-- Bottom Left: Health & Shield Gauges -->
+        <div class="hud-bottom-left">
+            <div class="operative-badge">
+                <span class="op-avatar">⚡</span>
+                <div class="op-details">
+                    <span class="op-name-display" id="player-op-name">APEX (AEX-01)</span>
+                    <span class="op-role-display">VANGUARD BREACHER</span>
+                </div>
+            </div>
+            <div class="bar-wrapper shield-bar-wrapper">
+                <div class="bar-label">SHIELD <span id="shield-text">100 / 100</span></div>
+                <div class="bar-container"><div class="bar-fill shield-fill" id="shield-fill"></div></div>
+            </div>
+            <div class="bar-wrapper health-bar-wrapper">
+                <div class="bar-label">HEALTH <span id="health-text">125 / 125</span></div>
+                <div class="bar-container"><div class="bar-fill health-fill" id="health-fill"></div></div>
+            </div>
+        </div>
+
+        <!-- Bottom Center: Abilities -->
+        <div class="hud-bottom-center">
+            <div class="ability-slot" id="ability-tactical">
+                <div class="ability-key">Q</div>
+                <div class="ability-icon">💨</div>
+                <div class="ability-name">SHOCKWAVE DASH</div>
+                <div class="ability-cooldown-overlay" id="cd-tactical"></div>
+            </div>
+            <div class="ability-slot ult-slot" id="ability-ultimate">
+                <div class="ability-key">Z</div>
+                <div class="ability-icon">💥</div>
+                <div class="ability-name">GRAVITON COLLAPSE</div>
+                <div class="ability-cooldown-overlay" id="cd-ultimate"></div>
+            </div>
+        </div>
+
+        <!-- Bottom Right: Weapon & Ammo Display -->
+        <div class="hud-bottom-right">
+            <div class="weapon-name-display" id="current-weapon-name">VORTEX-44 AR</div>
+            <div class="ammo-counter">
+                <span class="current-ammo" id="ammo-current">30</span>
+                <span class="ammo-separator">/</span>
+                <span class="reserve-ammo" id="ammo-reserve">180</span>
+            </div>
+            <div class="weapon-slots-hint">
+                <span class="slot-badge active">[1] AR</span>
+                <span class="slot-badge">[2] SMG</span>
+                <span class="slot-badge">[3] SHOTGUN</span>
+            </div>
+        </div>
+
+        <!-- Kill Feed -->
+        <div class="killfeed" id="killfeed"></div>
+    </div>
+
+    <!-- Start / Operative Selection Screen -->
+    <div id="start-screen" class="modal-overlay">
+        <div class="start-card">
+            <div class="game-logo">ECHOFRONT</div>
+            <div class="game-subtitle">FRACTURE PROTOCOL // 3D COMBAT DEPLOYMENT</div>
+            <p class="mission-brief">
+                Select your <strong>Operative</strong>, deploy into <strong>Reactor Sector 07</strong>, contest 3 dynamic Fracture Nodes against hostile rogue units, and extract with Chronal Shards before temporal destabilization.
+            </p>
+
+            <div class="operative-select-grid">
+                <div class="op-select-card active" data-op="APEX">
+                    <div class="op-select-avatar">⚡</div>
+                    <div class="op-select-name">APEX</div>
+                    <div class="op-select-role">Vanguard</div>
+                    <div class="op-select-desc">Kinetic shockwave dash & graviton singularity.</div>
+                </div>
+                <div class="op-select-card" data-op="BASTION">
+                    <div class="op-select-avatar">🛡️</div>
+                    <div class="op-select-name">BASTION-9</div>
+                    <div class="op-select-role">Sentinel</div>
+                    <div class="op-select-desc">Hardlight directional wall & nanite armor.</div>
+                </div>
+                <div class="op-select-card" data-op="VAPOR">
+                    <div class="op-select-avatar">👁️</div>
+                    <div class="op-select-name">VAPOR</div>
+                    <div class="op-select-role">Recon</div>
+                    <div class="op-select-desc">Sonar echo pulse & orbital scanner drone.</div>
+                </div>
+                <div class="op-select-card" data-op="WRAITH">
+                    <div class="op-select-avatar">🗡️</div>
+                    <div class="op-select-name">WRAITH</div>
+                    <div class="op-select-role">Hunter</div>
+                    <div class="op-select-desc">Active optical camouflage & phase shift.</div>
+                </div>
+            </div>
+
+            <div class="controls-guide">
+                <span>[WASD] Move</span>
+                <span>[Mouse] Aim & Shoot</span>
+                <span>[Shift] Sprint</span>
+                <span>[Space] Jump</span>
+                <span>[Q] Tactical</span>
+                <span>[Z] Ultimate</span>
+                <span>[R] Reload</span>
+                <span>[1-3] Swap Guns</span>
+            </div>
+
+            <button id="btn-deploy" class="btn-deploy">DEPLOY INTO FRACTURE</button>
+        </div>
+    </div>
+
+    <!-- Game Over / Victory Modal -->
+    <div id="gameover-screen" class="modal-overlay" style="display: none;">
+        <div class="start-card">
+            <div class="game-logo" id="endgame-title">MATCH EXTRACTION COMPLETE</div>
+            <p class="mission-brief" id="endgame-summary">You held the Fracture Nodes and extracted safely with Chronal Shards.</p>
+            <div class="endgame-stats" id="endgame-stats"></div>
+            <button id="btn-restart" class="btn-deploy">DEPLOY AGAIN</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

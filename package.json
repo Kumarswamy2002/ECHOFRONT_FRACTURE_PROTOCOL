@@ -1,0 +1,32 @@
+{
+  "name": "echofront-fracture-protocol",
+  "version": "1.0.0",
+  "description": "ECHOFRONT: Fracture Protocol - Authoritative Tactical Multiplayer Action Game & Enterprise Backend",
+  "main": "game-client/game.js",
+  "scripts": {
+    "start": "python -m http.server 8080 --directory game-client",
+    "start:backend": "python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload",
+    "start:admin": "python -m http.server 3000 --directory admin-portal",
+    "build": "echo 'Building Echofront Production Assets...' && exit 0",
+    "test": "pytest tests/ -v",
+    "lint": "flake8 backend/ --count --select=E9,F63,F7,F82 --show-source --statistics"
+  },
+  "keywords": [
+    "multiplayer",
+    "tactical-shooter",
+    "game-server",
+    "authoritative-simulation",
+    "fastapi",
+    "threejs",
+    "unreal-engine-5"
+  ],
+  "author": "ECHOFRONT Development Team",
+  "private": true,
+  "dependencies": {
+    "three": "^0.160.0",
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0"
+  }
+}

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECHOFRONT // Operational Fleet & Moderation Command</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">EF</div>
+                <div class="brand-info">
+                    <span class="brand-title">ECHOFRONT</span>
+                    <span class="brand-subtitle">FRACTURE PROTOCOL</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#overview" class="nav-item active" data-tab="overview">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Live Overview</span>
+                </a>
+                <a href="#operatives" class="nav-item" data-tab="operatives">
+                    <span class="nav-icon">🛡️</span>
+                    <span class="nav-label">Operative Roster</span>
+                </a>
+                <a href="#fractures" class="nav-item" data-tab="fractures">
+                    <span class="nav-icon">⚡</span>
+                    <span class="nav-label">Fracture Nodes</span>
+                </a>
+                <a href="#players" class="nav-item" data-tab="players">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-label">Player Directory</span>
+                </a>
+                <a href="#economy" class="nav-item" data-tab="economy">
+                    <span class="nav-icon">💎</span>
+                    <span class="nav-label">Store & Economy</span>
+                </a>
+                <a href="#anticheat" class="nav-item" data-tab="anticheat">
+                    <span class="nav-icon">🚨</span>
+                    <span class="nav-label">Security & Bans</span>
+                </a>
+            </nav>
+
+            <div class="server-status-card">
+                <div class="status-indicator online"></div>
+                <div class="status-details">
+                    <div class="status-label">SERVER FLEET 60Hz</div>
+                    <div class="status-value" id="fleet-health">100% OPERATIONAL</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header Bar -->
+            <header class="topbar">
+                <div class="header-title">
+                    <h1 id="page-title">Operational Telemetry & Fleet Overview</h1>
+                    <p class="header-subtitle">Real-time authoritative telemetry, anti-cheat heuristical monitoring, and economy control.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="btn-refresh">⟳ Refresh Telemetry</button>
+                    <div class="admin-badge">ADMIN // LEVEL 4 CLEARANCE</div>
+                </div>
+            </header>
+
+            <!-- TAB 1: OVERVIEW -->
+            <section id="tab-overview" class="tab-pane active">
+                <div class="stats-grid">
+                    <div class="stat-card glass">
+                        <div class="stat-header">
+                            <span class="stat-title">CURRENT CONCURRENT (CCU)</span>
+                            <span class="stat-badge live">LIVE</span>
+                        </div>
+                        <div class="stat-number" id="stat-ccu">1,482</div>
+                        <div class="stat-desc">Across 68 dedicated instances</div>
+                    </div>
+
+                    <div class="stat-card glass">
+                        <div class="stat-header">
+                            <span class="stat-title">DAILY ACTIVE (DAU)</span>
+                            <span class="stat-badge success">+18.4%</span>
+                        </div>
+                        <div class="stat-number" id="stat-dau">24,930</div>
+                        <div class="stat-desc">Unique operatives logged in</div>
+                    </div>
+
+                    <div class="stat-card glass">
+                        <div class="stat-header">
+                            <span class="stat-title">AVG SERVER TICK RATE</span>
+                            <span class="stat-badge good">60.0 Hz</span>
+                        </div>
+                        <div class="stat-number" id="stat-tick">59.98 <span class="unit">Hz</span></div>
+                        <div class="stat-desc">0.02ms simulation drift</div>
+                    </div>
+
+                    <div class="stat-card glass">
+                        <div class="stat-header">
+                            <span class="stat-title">CHRONAL SHARDS EXTRACTED</span>
+                            <span class="stat-badge shards">LEDGER</span>
+                        </div>
+                        <div class="stat-number" id="stat-shards">184,920</div>
+                        <div class="stat-desc">100% idempotent ledger verified</div>
+                    </div>
+                </div>
+
+                <!-- Active Match Instances Grid -->
+                <div class="content-section glass">
+                    <div class="section-header">
+                        <h2>Authoritative Dedicated Match Instances</h2>
+                        <span class="badge info">Active 12-24 Player Lobbies</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Session ID</th>
+                                    <th>Mode</th>
+                                    <th>Map</th>
+                                    <th>Players</th>
+                                    <th>Tick Rate</th>
+                                    <th>Node Energy</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="active-matches-tbody">
+                                <tr>
+                                    <td><code>FRACTURE_US_EAST_049</code></td>
+                                    <td><span class="badge mode-fracture">Fracture</span></td>
+                                    <td>Reactor_Chamber_07</td>
+                                    <td>24 / 24</td>
+                                    <td><span class="tick-good">60.0 Hz</span></td>
+                                    <td>14,200 / 20,000</td>
+                                    <td><span class="status-pill in-progress">In Progress</span></td>
+                                </tr>
+                                <tr>
+                                    <td><code>EXTRACTION_EU_012</code></td>
+                                    <td><span class="badge mode-extraction">Extraction</span></td>
+                                    <td>Subterranean_Silo_B</td>
+                                    <td>18 / 24</td>
+                                    <td><span class="tick-good">59.9 Hz</span></td>
+                                    <td>9,850 / 15,000</td>
+                                    <td><span class="status-pill in-progress">In Progress</span></td>
+                                </tr>
+                                <tr>
+                                    <td><code>TERRITORY_ASIA_081</code></td>
+                                    <td><span class="badge mode-territory">Territory</span></td>
+                                    <td>Quantum_Foundry</td>
+                                    <td>24 / 24</td>
+                                    <td><span class="tick-good">60.0 Hz</span></td>
+                                    <td>18,900 / 20,000</td>
+                                    <td><span class="status-pill destab">Destabilizing</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: OPERATIVES -->
+            <section id="tab-operatives" class="tab-pane">
+                <div class="section-header">
+                    <h2>12 Original Operatives & Data-Driven Ability Matrix</h2>
+                    <p class="subtitle">Complete original roster with balanced ability graphs, cooldowns, and role parameters.</p>
+                </div>
+                <div class="roster-grid" id="operatives-grid">
+                    <!-- Dynamic Operatives Rendered by JS -->
+                </div>
+            </section>
+
+            <!-- TAB 3: FRACTURE NODES -->
+            <section id="tab-fractures" class="tab-pane">
+                <div class="section-header">
+                    <h2>Dynamic 5-Stage Fracture Node Simulation Engine</h2>
+                    <p class="subtitle">Real-time status of spatial resonance nodes controlling extraction and map hazards.</p>
+                </div>
+                <div class="nodes-grid" id="nodes-grid">
+                    <!-- Dynamic Nodes Rendered by JS -->
+                </div>
+            </section>
+
+            <!-- TAB 4: PLAYERS & DIRECTORY -->
+            <section id="tab-players" class="tab-pane">
+                <div class="section-header">
+                    <h2>Player Directory & Progression State</h2>
+                    <div class="search-box">
+                        <input type="text" id="player-search-input" placeholder="Search operative username or ID...">
+                    </div>
+                </div>
+                <div class="content-section glass">
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Display Name</th>
+                                    <th>Level</th>
+                                    <th>Rank Tier</th>
+                                    <th>Credits</th>
+                                    <th>Shards</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="players-tbody">
+                                <!-- Dynamic Player List -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: STORE & ECONOMY -->
+            <section id="tab-economy" class="tab-pane">
+                <div class="section-header">
+                    <h2>Cosmetic Store Catalog & Non-P2W Integrity</h2>
+                    <p class="subtitle">Strictly aesthetic items with double-entry immutable transaction verification.</p>
+                </div>
+                <div class="store-grid" id="store-grid">
+                    <!-- Dynamic Store Items -->
+                </div>
+            </section>
+
+            <!-- TAB 6: SECURITY & BANS -->
+            <section id="tab-anticheat" class="tab-pane">
+                <div class="section-header">
+                    <h2>Anti-Cheat Heuristics & Moderation Queue</h2>
+                    <p class="subtitle">Real-time speedhack, rapid-fire, and impossible vector violation detections.</p>
+                </div>
+                <div class="content-section glass">
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Incident ID</th>
+                                    <th>Target Player</th>
+                                    <th>Violation Type</th>
+                                    <th>Risk Score</th>
+                                    <th>Evidence Snippet</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="violations-tbody">
+                                <tr>
+                                    <td><code>SEC_90812</code></td>
+                                    <td>SpecterGhost_99</td>
+                                    <td><span class="badge danger">Speedhack (19.4 m/s)</span></td>
+                                    <td><span class="risk-high">94%</span></td>
+                                    <td>Continuous speed delta > 16.5 m/s without grapple or slide boost.</td>
+                                    <td><button class="btn btn-sm btn-danger">Apply Ban</button></td>
+                                </tr>
+                                <tr>
+                                    <td><code>SEC_90813</code></td>
+                                    <td>ShadowAim_XX</td>
+                                    <td><span class="badge warning">Fire-Rate Anomaly</span></td>
+                                    <td><span class="risk-med">78%</span></td>
+                                    <td>Vortex-44 fired 12 rounds in 0.45s (exceeded 680 RPM clamp).</td>
+                                    <td><button class="btn btn-sm btn-warning">Issue Warning</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
