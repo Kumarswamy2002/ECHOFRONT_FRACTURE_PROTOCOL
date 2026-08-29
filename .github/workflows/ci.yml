@@ -2,7 +2,7 @@ name: ECHOFRONT CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, develop, "feature/**" ]
   pull_request:
     branches: [ main ]
 
@@ -27,8 +27,10 @@ jobs:
         pip install -r backend/requirements.txt
 
     - name: Run Test Suite
+      env:
+        PYTHONPATH: .
       run: |
-        pytest tests/ -v
+        python -m pytest tests/ -v
 
   docker-build:
     name: Container Build & Verification
@@ -47,6 +49,6 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: infrastructure/Dockerfile.backend
+        file: Dockerfile
         push: false
         tags: echofront-backend:latest
