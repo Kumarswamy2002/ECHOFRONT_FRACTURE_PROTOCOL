@@ -1,5 +1,6 @@
 import os
 import sys
+import uuid
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import pytest
@@ -26,26 +27,31 @@ async def test_health_check():
 @pytest.mark.asyncio
 async def test_register_and_login_flow():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
-        # 1. Register
+        suffix = uuid.uuid4().hex[:8]
+        test_email = f"operative_{suffix}@echofront.gg"
+        test_username = f"Apex_{suffix}"
+        test_password = "StrongPassword2026!"
+
+        # 1. Register unique player
         reg_payload = {
-            "email": "operative_apex@echofront.gg",
-            "username": "ApexBreacher",
-            "password": "StrongPassword2026!",
-            "display_name": "Apex"
+            "email": test_email,
+            "username": test_username,
+            "password": test_password,
+            "display_name": f"Apex {suffix}"
         }
         reg_res = await ac.post("/api/v1/auth/register", json=reg_payload)
-        assert reg_res.status_code == 201
+        assert reg_res.status_code == 201, f"Registration failed: {reg_res.text}"
         data = reg_res.json()
         assert "access_token" in data
-        assert data["username"] == "ApexBreacher"
+        assert data["username"] == test_username
 
         # 2. Login
         login_payload = {
-            "username": "ApexBreacher",
-            "password": "StrongPassword2026!"
+            "username": test_username,
+            "password": test_password
         }
         login_res = await ac.post("/api/v1/auth/login", json=login_payload)
-        assert login_res.status_code == 200
+        assert login_res.status_code == 200, f"Login failed: {login_res.text}"
         token = login_res.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}
 
